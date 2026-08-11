@@ -77,6 +77,8 @@ Measures:
 
 These measurements are useful because environmental conditions can affect particle readings.
 
+Your PM sensor likely works by **detecting how particles scatter light**. Humidity can change the particles themselves—for example, some particles absorb water and become larger—which can change how much light they scatter. That can make an optical PM sensor report a different concentration even when the actual dry particle mass hasn't changed proportionally. Research reviewed by EPA has found that relative humidity can affect low-cost optical PM measurements.
+
 ### Gas Sensor
 
 Measures air-quality-related gases such as TVOC and eCO₂, depending on the sensor used.
@@ -251,6 +253,7 @@ AIR IN ──────→│ BEFORE FILTRATION  │
 | RGB LED             | Shows air-quality condition                   |
 | Relay / MOSFET      | Controls the blower                           |
 | 12V Adapter         | Powers the blower                             |
+| Jumper Wires        | Connects the electronic components            |
 | Bottle              | Airflow and filtration chamber                |
 
 ---
@@ -264,6 +267,14 @@ This allows us to show:
 **Polluted Air → Measurement → Filtration → Measurement → Reduction**
 
 The project can be used as a STEM demonstration to help students understand **air pollution, particulate matter, sensors, filtration and environmental protection**.
+
+---
+
+## 🌍 Sustainable Development Goal (SDG)
+
+### SDG 13 – Climate Action
+
+Our project supports **SDG 13: Climate Action** by monitoring air pollution and testing a filtration method that can reduce particulate matter in polluted air.
 
 ---
 
