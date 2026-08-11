@@ -1,239 +1,276 @@
-# Air Pollution Monitoring and Mitigation System
+# 🌱 Air Pollution Monitoring and Mitigation System
 
-## 1. Project Overview
+## 📌 Project Overview
 
-Our project is an **Air Pollution Monitoring and Mitigation System** designed to detect air pollution and help reduce the impact of polluted air.
+Our project is an **Air Pollution Monitoring and Mitigation System** that detects air pollution and tests how effectively a filtration system can reduce particulate matter.
 
-The system uses sensors to measure **particulate matter and gases in the air**. The readings are processed by an **Arduino Uno R4 WiFi**. An RGB LED shows the air-quality condition using different colours.
+The system uses **two PM sensors** to measure the air before and after filtration. This allows us to compare the readings and calculate the percentage of particle reduction.
 
-A **12V 5015 DC blower** can also be used to control airflow through a filter or ventilation system when needed.
-
----
-
-## 2. Problem
-
-Air pollution can be caused by:
-
-* Vehicle exhaust
-* Industrial activities
-* Burning of materials
-* Dust
-* Smoke
-* Fine particles in the air
-* Harmful gases
-
-Small particles such as **PM2.5** are especially important because they are small enough to remain suspended in the air.
-
-Our project aims to monitor these pollutants and provide an easy-to-understand warning when the air quality becomes unhealthy.
+The filtration system is placed **inside a bottle**, while the Arduino, OLED display, RGB LED, relay/MOSFET and power supply are placed **beside the bottle**.
 
 ---
 
-## 3. Objectives
+## 🎯 Objectives
 
-The objectives of our project are to:
-
-1. Measure particulate matter such as **PM2.5 and PM10**.
-2. Detect changes in air quality using a **gas sensor**.
-3. Display air-quality information clearly.
-4. Use an **RGB LED** to indicate the air-quality condition.
-5. Use the Arduino Uno R4 WiFi as the main controller.
-6. Provide a system that can potentially help reduce exposure to polluted air.
-
----
-
-## 4. Main Components
-
-| Component              | Function                                                      |
-| ---------------------- | ------------------------------------------------------------- |
-| Arduino Uno R4 WiFi    | Controls the whole system and processes sensor readings       |
-| HM330X Particle Sensor | Measures particulate matter such as PM2.5 and PM10            |
-| SGP30 Gas Sensor       | Measures air-quality-related gas levels such as TVOC and eCO₂ |
-| RGB LED                | Shows the air-quality condition using different colours       |
-| 0.96" OLED Display     | Displays sensor readings and system information               |
-| 5015 12V DC Blower     | Moves air through the system/filter                           |
-| 12V DC Adapter         | Provides power for the 12V blower                             |
-| Relay/MOSFET           | Allows the Arduino to control the blower safely               |
-| Wires                  | Connects the components                                       |
-| Filter material        | Helps remove some particles from the airflow                  |
+* Detect particulate matter such as PM2.5 and PM10.
+* Measure air quality before and after filtration.
+* Filter particles from polluted air.
+* Calculate the percentage of particle reduction.
+* Measure temperature and humidity.
+* Detect air-quality-related gases.
+* Display the results on an OLED.
+* Use an RGB LED to show the air-quality condition.
 
 ---
 
-## 5. How It Works
+## 🌬️ How the Airflow Works
 
-The system works in several stages:
-
-### Step 1 — Air enters the system
-
-Air containing dust, particles or gases enters the monitoring area.
-
-### Step 2 — Sensors measure the air
-
-The particle sensor measures particulate matter such as PM2.5 and PM10.
-
-The gas sensor detects changes in air-quality-related gases.
-
-### Step 3 — Arduino processes the readings
-
-The sensors send their readings to the **Arduino Uno R4 WiFi**.
-
-The Arduino compares the readings with the selected air-quality limits.
-
-### Step 4 — RGB LED indicates the condition
-
-The RGB LED changes colour depending on the measured condition.
-
-For example:
-
-* 🟢 **Green** — Healthy
-* 🟡 **Yellow** — Moderate
-* 🔴 **Red** — Unhealthy
-
-### Step 5 — Blower helps move air
-
-The 5015 blower moves air through the system.
-
-Because the blower operates at **12V**, it should be powered by a separate 12V DC power supply rather than directly from an Arduino pin.
-
----
-
-## 6. Environmental Conditions
-
-Environmental conditions can affect particle measurements.
-
-Important factors include:
-
-### Humidity
-
-High humidity can cause some particles to absorb water and become larger, which can affect sensor readings.
-
-### Temperature
-
-Temperature changes can affect air properties and sensor performance.
-
-### Wind and airflow
-
-Air movement can change how particles reach the sensor.
-
-### Rain
-
-Rain can remove some particles from the air, causing particle concentrations to decrease.
-
-Therefore, environmental conditions should be considered when comparing measurements.
-
----
-
-## 7. System Flow
+Polluted air enters the bottle and passes through the sensors and filtration layers.
 
 ```text
-             AIR
-              ↓
-      ┌───────────────┐
-      │ Particle      │
-      │ Sensor        │
-      └───────┬───────┘
-              │
-              ↓
-      ┌───────────────┐
-      │ Gas Sensor    │
-      └───────┬───────┘
-              │
-              ↓
-      ┌───────────────────┐
-      │ Arduino Uno R4    │
-      │ WiFi              │
-      └───────┬───────────┘
-              │
-       ┌──────┴──────┐
-       ↓             ↓
-   RGB LED         OLED
-       │
-       ↓
- Air Quality     Sensor
-  Indicator      Readings
-
-              +
-              │
-              ↓
-        ┌───────────┐
-        │  Blower   │
-        │   12V     │
-        └───────────┘
-              ↑
-              │
-        12V Adapter
+         AIR IN
+           ↓
+   ┌───────────────┐
+   │ PM SENSOR #1  │
+   │  BEFORE       │
+   │  FILTRATION   │
+   │               │
+   │ DHT22         │
+   │ Gas Sensor    │
+   │               │
+   │ PRE-FILTER    │
+   │ Coffee Filter │
+   │               │
+   │ COTTON        │
+   │               │
+   │ ACTIVATED     │
+   │ CARBON        │
+   │               │
+   │ HEPA FILTER   │
+   │               │
+   │ PM SENSOR #2  │
+   │  AFTER        │
+   │  FILTRATION   │
+   └───────┬───────┘
+           ↓
+    STRONG DC BLOWER
+           ↓
+        AIR OUT
 ```
 
 ---
 
-## 8. Why Use an External Power Supply?
+## 🧴 Inside the Bottle
 
-The Arduino is mainly used as the **controller**.
+The bottle acts as the **airflow and filtration chamber**.
 
-The 5015 blower requires **12V**, while the Arduino cannot safely provide the required power directly from its GPIO pins.
+### PM Sensor #1
 
-Therefore:
+Measures the particle concentration **before filtration**.
 
-**12V adapter → powers blower**
+### DHT22
 
-**Arduino → controls blower**
+Measures:
 
-This prevents the blower from drawing too much current from the Arduino.
+* Temperature
+* Humidity
 
----
+These measurements are useful because environmental conditions can affect particle readings.
 
-## 9. Possible Applications
+### Gas Sensor
 
-This system could be developed for:
+Measures air-quality-related gases such as TVOC and eCO₂, depending on the sensor used.
 
-* Schools
-* Laboratories
-* Workshops
-* Indoor environmental monitoring
-* Areas near roads
-* Industrial areas
-* Environmental education projects
+### Coffee Filter
 
-It can also be used as a STEM project to demonstrate how sensors, Arduino, electronics and environmental science can work together.
+Acts as a **pre-filter** to catch some larger particles.
 
----
+### Cotton
 
-## 10. Advantages
+Provides another physical filtration layer.
 
-* Real-time air-quality monitoring
-* Easy-to-understand RGB indication
-* Can display actual sensor readings
-* Uses Arduino Uno R4 WiFi
-* Can potentially be connected to IoT monitoring
-* Helps students understand air pollution
-* Can be expanded with additional sensors
+### Activated Carbon
 
----
+Helps adsorb certain gases and organic compounds and can help reduce some odors.
 
-## 11. Limitations
+### HEPA Filter
 
-The sensors used in a prototype may not have the same accuracy as professional air-quality monitoring equipment.
+Helps capture very fine particles.
 
-Environmental conditions such as humidity, temperature, wind and rain can also affect measurements.
+### PM Sensor #2
 
-Therefore, the project should be considered a **school-level environmental monitoring prototype**, not a replacement for professional air-quality monitoring stations.
+Measures the particle concentration **after filtration**.
+
+### Strong DC Blower
+
+Moves the air through the entire system.
 
 ---
 
-## 12. Future Improvements
+## 🔌 Electronics Beside the Bottle
 
-Possible future improvements include:
+The electronic components are kept **outside the bottle**.
 
-* Add Blynk IoT for remote monitoring.
-* Add temperature and humidity sensors.
-* Store measurements on an SD card.
-* Add a real-time clock (RTC).
-* Improve the air-filtering system.
-* Automatically control the blower based on pollution levels.
-* Create graphs showing changes in PM2.5 and PM10.
-* Add more air-quality sensors for comparison.
+### Arduino Uno R4 WiFi
+
+The main controller that receives sensor data, processes the readings and controls the system.
+
+### OLED Display
+
+Shows the measurements and filtration results.
+
+Example:
+
+```text
+┌─────────────────────┐
+│     OLED DISPLAY    │
+│                     │
+│ BEFORE: 65          │
+│ AFTER:  24          │
+│ REDUCTION: 63%      │
+│                     │
+│ TEMP: 29°C          │
+│ HUM: 68%            │
+└─────────────────────┘
+```
+
+### RGB LED
+
+Shows the air-quality condition:
+
+```text
+🟢 Green  = Healthy
+🟡 Yellow = Moderate
+🔴 Red    = Unhealthy
+```
+
+### Relay / MOSFET
+
+Allows the Arduino to control the blower safely.
+
+### 12V Adapter
+
+Provides power for the 12V DC blower.
 
 ---
 
-## 13. Project Goal
+## 📊 Before vs After
 
-The main goal of this project is to **detect air pollution, show the air-quality condition clearly, and explore a practical way to help manage polluted air using sensors, an Arduino and an airflow/filtering system.**
+The two PM sensors allow us to measure the effectiveness of the filter.
+
+For example:
+
+```text
+BEFORE = 65
+AFTER  = 24
+```
+
+The reduction is calculated using:
+
+```text
+Reduction (%) = (Before - After) / Before × 100
+```
+
+Example:
+
+```text
+Reduction = (65 - 24) / 65 × 100
+          ≈ 63%
+```
+
+Therefore, the system measured approximately **63% particle reduction** in this example.
+
+---
+
+## ⚙️ How the System Works
+
+1. Polluted air enters the bottle.
+2. PM Sensor #1 measures the particles before filtration.
+3. The DHT22 measures temperature and humidity.
+4. The gas sensor measures air-quality-related gases.
+5. Air passes through the coffee filter.
+6. Air passes through the cotton layer.
+7. Air passes through activated carbon.
+8. Air passes through the HEPA filter.
+9. PM Sensor #2 measures the particles after filtration.
+10. The blower moves the air through the system.
+11. The Arduino compares the two PM readings.
+12. The percentage reduction is calculated.
+13. The OLED displays the results.
+14. The RGB LED shows the air-quality condition.
+
+---
+
+## 🔗 System Layout
+
+```text
+                    🧴 BOTTLE                         ELECTRONICS
+
+              ┌───────────────────┐
+              │ PM SENSOR #1       │
+AIR IN ──────→│ BEFORE FILTRATION  │
+              │                   │        ┌───────────────────┐
+              │ DHT22             │───────→│   OLED DISPLAY    │
+              │ Gas Sensor        │        └───────────────────┘
+              │                   │
+              │ Coffee Filter     │               🔴 🟡 🟢
+              │       ↓           │              RGB LED
+              │ Cotton            │
+              │       ↓           │        ┌───────────────────┐
+              │ Activated Carbon  │───────→│ Arduino Uno R4    │
+              │       ↓           │        │       WiFi        │
+              │ HEPA Filter       │        └─────────┬─────────┘
+              │       ↓           │                  │
+              │ PM SENSOR #2      │           ┌──────┴──────┐
+              │ AFTER FILTRATION   │           │ Relay/MOSFET│
+              │       ↓           │           └──────┬──────┘
+              │ Strong DC Blower  │                  │
+              └────────┬──────────┘                  ↓
+                       ↓                      ┌──────────────┐
+                    AIR OUT                   │ 12V Adapter  │
+                                              └──────────────┘
+```
+
+---
+
+## 🧩 Main Components
+
+| Component           | Function                                      |
+| ------------------- | --------------------------------------------- |
+| Arduino Uno R4 WiFi | Main controller                               |
+| PM Sensor #1        | Measures particles before filtration          |
+| PM Sensor #2        | Measures particles after filtration           |
+| DHT22               | Measures temperature and humidity             |
+| Gas Sensor          | Measures air-quality-related gases            |
+| Coffee Filter       | Pre-filtration                                |
+| Cotton              | Physical filtration                           |
+| Activated Carbon    | Adsorption of certain gases/organic compounds |
+| HEPA Filter         | Fine particle filtration                      |
+| Strong DC Blower    | Moves air through the system                  |
+| OLED Display        | Displays measurements and reduction           |
+| RGB LED             | Shows air-quality condition                   |
+| Relay / MOSFET      | Controls the blower                           |
+| 12V Adapter         | Powers the blower                             |
+| Bottle              | Airflow and filtration chamber                |
+
+---
+
+## 🌱 Environmental Purpose
+
+The project does more than simply detect pollution. It also **tests a possible mitigation method** by filtering the polluted air and comparing the particle concentration before and after filtration.
+
+This allows us to show:
+
+**Polluted Air → Measurement → Filtration → Measurement → Reduction**
+
+The project can be used as a STEM demonstration to help students understand **air pollution, particulate matter, sensors, filtration and environmental protection**.
+
+---
+
+## ⚠️ Important Note
+
+The prototype's readings can be affected by environmental conditions such as **temperature, humidity, airflow and particle concentration**.
+
+The calculated reduction is based on the measurements from the prototype and should not be treated as professional air-quality certification.
+
+The **12V blower must be powered by a suitable external 12V DC power supply** and should not be powered directly from an Arduino GPIO pin.
