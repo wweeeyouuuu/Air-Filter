@@ -209,8 +209,8 @@ Therefore, the system measured approximately **63% particle reduction** in this 
                     🧴 BOTTLE                         ELECTRONICS
 
               ┌───────────────────┐
-              │ PM SENSOR #1       │
-AIR IN ──────→│ BEFORE FILTRATION  │
+              │ PM SENSOR #1      │
+AIR IN ──────→│ BEFORE FILTRATION │
               │                   │        ┌───────────────────┐
               │ DHT22             │───────→│   OLED DISPLAY    │
               │ Gas Sensor        │        └───────────────────┘
@@ -224,7 +224,7 @@ AIR IN ──────→│ BEFORE FILTRATION  │
               │ HEPA Filter       │        └─────────┬─────────┘
               │       ↓           │                  │
               │ PM SENSOR #2      │           ┌──────┴──────────┐
-              │ AFTER FILTRATION   │          │ Lipo Rider Plus │
+              │ AFTER FILTRATION  │           │ Lipo Rider Plus │
               │       ↓           │           └──────┬──────────┘
               │ Strong DC Blower  │                  │
               └────────┬──────────┘                  ↓
