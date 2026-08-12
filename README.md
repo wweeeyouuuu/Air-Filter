@@ -223,13 +223,13 @@ AIR IN ──────→│ BEFORE FILTRATION  │
               │       ↓           │        │       WiFi        │
               │ HEPA Filter       │        └─────────┬─────────┘
               │       ↓           │                  │
-              │ PM SENSOR #2      │           ┌──────┴──────┐
-              │ AFTER FILTRATION   │           │ Relay/MOSFET│
-              │       ↓           │           └──────┬──────┘
+              │ PM SENSOR #2      │           ┌──────┴──────────┐
+              │ AFTER FILTRATION   │          │ Lipo Rider Plus│
+              │       ↓           │           └──────┬──────────┘
               │ Strong DC Blower  │                  │
               └────────┬──────────┘                  ↓
                        ↓                      ┌──────────────┐
-                    AIR OUT                   │ 12V Adapter  │
+                    AIR OUT                   │ Battery      │
                                               └──────────────┘
 ```
 
