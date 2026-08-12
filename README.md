@@ -146,13 +146,13 @@ Shows the air-quality condition:
 🔴 Red    = Unhealthy
 ```
 
-### Relay / MOSFET
+### LiPo Rider Plus
 
-Allows the Arduino to control the blower safely.
+Manages the rechargeable LiPo battery and provides power to the project components
 
-### 12V Adapter
+### LiPo Battery
 
-Provides power for the 12V DC blower.
+Stores electrical energy and supplies power to the Arduino and other components when the system is running without a direct power adapter
 
 ---
 
@@ -224,7 +224,7 @@ AIR IN ──────→│ BEFORE FILTRATION  │
               │ HEPA Filter       │        └─────────┬─────────┘
               │       ↓           │                  │
               │ PM SENSOR #2      │           ┌──────┴──────────┐
-              │ AFTER FILTRATION   │          │ Lipo Rider Plus│
+              │ AFTER FILTRATION   │          │ Lipo Rider Plus │
               │       ↓           │           └──────┬──────────┘
               │ Strong DC Blower  │                  │
               └────────┬──────────┘                  ↓
@@ -251,8 +251,8 @@ AIR IN ──────→│ BEFORE FILTRATION  │
 | Strong DC Blower    | Moves air through the system                  |
 | OLED Display        | Displays measurements and reduction           |
 | RGB LED             | Shows air-quality condition                   |
-| Relay / MOSFET      | Controls the blower                           |
-| 12V Adapter         | Powers the blower                             |
+| LiPo Rider Plus     | Manages and supplies battery power            |
+| Lipo Battery        | Provides power to the system                  |
 | Jumper Wires        | Connects the electronic components            |
 | Bottle              | Airflow and filtration chamber                |
 
