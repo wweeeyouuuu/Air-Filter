@@ -68,7 +68,7 @@ The bottle acts as the **airflow and filtration chamber**.
 
 Measures the particle concentration **before filtration**.
 
-### DHT22
+### DHT11
 
 Measures:
 
@@ -188,7 +188,7 @@ Therefore, the system measured approximately **63% particle reduction** in this 
 
 1. Polluted air enters the bottle.
 2. PM Sensor #1 measures the particles before filtration.
-3. The DHT22 measures temperature and humidity.
+3. The DHT11 measures temperature and humidity.
 4. The gas sensor measures air-quality-related gases.
 5. Air passes through the coffee filter.
 6. Air passes through the cotton layer.
@@ -212,7 +212,7 @@ Therefore, the system measured approximately **63% particle reduction** in this 
               │ PM SENSOR #1      │
 AIR IN ──────→│ BEFORE FILTRATION │
               │                   │        ┌───────────────────┐
-              │ DHT22             │───────→│   OLED DISPLAY    │
+              │ DHT11             │───────→│   OLED DISPLAY    │
               │ Gas Sensor        │        └───────────────────┘
               │                   │
               │ Coffee Filter     │               🔴 🟡 🟢
@@ -242,7 +242,7 @@ AIR IN ──────→│ BEFORE FILTRATION │
 | Arduino Uno R4 WiFi | Main controller                               |
 | PM Sensor #1        | Measures particles before filtration          |
 | PM Sensor #2        | Measures particles after filtration           |
-| DHT22               | Measures temperature and humidity             |
+| DHT11               | Measures temperature and humidity             |
 | Gas Sensor          | Measures air-quality-related gases            |
 | Coffee Filter       | Pre-filtration                                |
 | Cotton              | Physical filtration                           |
