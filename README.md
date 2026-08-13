@@ -126,13 +126,12 @@ Example:
 ```text
 ┌─────────────────────┐
 │     OLED DISPLAY    │
-│                     │
-│ BEFORE: 65          │
-│ AFTER:  24          │
+│ AQI SCORE: 82       │
+│ PM2.5 bf: 65 μ g/m³ │
+│ PM2.5 af: 24 μ g/m³ │
+│ VOC GAS : 10 ppb    │
 │ REDUCTION: 63%      │
-│                     │
-│ TEMP: 29°C          │
-│ HUM: 68%            │
+│ T: 29°C    H: 68%   │
 └─────────────────────┘
 ```
 
