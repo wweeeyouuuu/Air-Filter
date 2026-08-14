@@ -31,10 +31,7 @@ Polluted air enters the bottle and passes through the sensors and filtration lay
          AIR IN
            ↓
    ┌───────────────┐
-   │ PM SENSOR #1  │
-   │  BEFORE       │
-   │  FILTRATION   │
-   │               │
+   │ PM SENSOR     │
    │ DHT22         │
    │ Gas Sensor    │
    │               │
@@ -64,9 +61,9 @@ Polluted air enters the bottle and passes through the sensors and filtration lay
 
 The bottle acts as the **airflow and filtration chamber**.
 
-### PM Sensor #1
+### PM Sensor  
 
-Measures the particle concentration **before filtration**.
+Measures the particle concentration  
 
 ### DHT11
 
@@ -98,12 +95,8 @@ Helps adsorb certain gases and organic compounds and can help reduce some odors.
 ### HEPA Filter
 
 Helps capture very fine particles.
-
-### PM Sensor #2
-
-Measures the particle concentration **after filtration**.
-
-### Strong DC Blower
+ 
+### DC Brushless Fan 12V
 
 Moves the air through the entire system.
 
@@ -128,9 +121,7 @@ Example:
 │     OLED DISPLAY    │
 │ AQI SCORE: 82       │
 │ PM2.5 bf: 65 μ g/m³ │
-│ PM2.5 af: 24 μ g/m³ │
 │ VOC GAS : 10 ppb    │
-│ REDUCTION: 63%      │
 │ T: 29°C    H: 68%   │
 └─────────────────────┘
 ```
@@ -239,8 +230,7 @@ AIR IN ──────→│ BEFORE FILTRATION │
 | Component           | Function                                      |
 | ------------------- | --------------------------------------------- |
 | Arduino Uno R4 WiFi | Main controller                               |
-| PM Sensor #1        | Measures particles before filtration          |
-| PM Sensor #2        | Measures particles after filtration           |
+| PM Sensor           | Measures particles before filtration          |
 | DHT11               | Measures temperature and humidity             |
 | Gas Sensor          | Measures air-quality-related gases            |
 | Coffee Filter       | Pre-filtration                                |
