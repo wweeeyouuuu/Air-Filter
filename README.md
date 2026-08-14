@@ -4,18 +4,14 @@
 
 Our project is an **Air Pollution Monitoring and Mitigation System** that detects air pollution and tests how effectively a filtration system can reduce particulate matter.
 
-The system uses **two PM sensors** to measure the air before and after filtration. This allows us to compare the readings and calculate the percentage of particle reduction.
-
-The filtration system is placed **inside a bottle**, while the Arduino, OLED display, RGB LED, relay/MOSFET and power supply are placed **beside the bottle**.
+The filtration system is placed **inside a bottle**, while the Arduino, OLED display, RGB LED, Lipo Rider Plus and power supply are placed **beside the bottle**.
 
 ---
 
 ## 🎯 Objectives
 
 * Detect particulate matter such as PM2.5 and PM10.
-* Measure air quality before and after filtration.
 * Filter particles from polluted air.
-* Calculate the percentage of particle reduction.
 * Measure temperature and humidity.
 * Detect air-quality-related gases.
 * Display the results on an OLED.
@@ -35,22 +31,17 @@ Polluted air enters the bottle and passes through the sensors and filtration lay
    │ DHT22         │
    │ Gas Sensor    │
    │               │
-   │ PRE-FILTER    │
-   │ Coffee Filter │
+   │ Cotton        │
    │               │
-   │ COTTON        │
+   │ Coffee filter │
    │               │
    │ ACTIVATED     │
    │ CARBON        │
    │               │
    │ HEPA FILTER   │
    │               │
-   │ PM SENSOR #2  │
-   │  AFTER        │
-   │  FILTRATION   │
+   │ DC Fan        │
    └───────┬───────┘
-           ↓
-    STRONG DC BLOWER
            ↓
         AIR OUT
 ```
@@ -143,34 +134,6 @@ Manages the rechargeable LiPo battery and provides power to the project componen
 ### LiPo Battery
 
 Stores electrical energy and supplies power to the Arduino and other components when the system is running without a direct power adapter
-
----
-
-## 📊 Before vs After
-
-The two PM sensors allow us to measure the effectiveness of the filter.
-
-For example:
-
-```text
-BEFORE = 65
-AFTER  = 24
-```
-
-The reduction is calculated using:
-
-```text
-Reduction (%) = (Before - After) / Before × 100
-```
-
-Example:
-
-```text
-Reduction = (65 - 24) / 65 × 100
-          ≈ 63%
-```
-
-Therefore, the system measured approximately **63% particle reduction** in this example.
 
 ---
 
