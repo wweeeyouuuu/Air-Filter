@@ -140,19 +140,18 @@ Stores electrical energy and supplies power to the Arduino and other components 
 ## ⚙️ How the System Works
 
 1. Polluted air enters the bottle.
-2. PM Sensor #1 measures the particles before filtration.
+2. PM Sensor measures the particles 
 3. The DHT11 measures temperature and humidity.
 4. The gas sensor measures air-quality-related gases.
 5. Air passes through the coffee filter.
 6. Air passes through the cotton layer.
 7. Air passes through activated carbon.
 8. Air passes through the HEPA filter.
-9. PM Sensor #2 measures the particles after filtration.
-10. The blower moves the air through the system.
-11. The Arduino compares the two PM readings.
-12. The percentage reduction is calculated.
-13. The OLED displays the results.
-14. The RGB LED shows the air-quality condition.
+9. The blower moves the air through the system.
+10. The Arduino compares the two PM readings.
+11. The percentage reduction is calculated.
+12. The OLED displays the results.
+13. The RGB LED shows the air-quality condition.
 
 ---
 
@@ -162,7 +161,7 @@ Stores electrical energy and supplies power to the Arduino and other components 
                     🧴 BOTTLE                         ELECTRONICS
 
               ┌───────────────────┐
-              │ PM SENSOR #1      │
+              │ PM SENSOR         │
 AIR IN ──────→│ BEFORE FILTRATION │
               │                   │        ┌───────────────────┐
               │ DHT11             │───────→│   OLED DISPLAY    │
@@ -176,13 +175,13 @@ AIR IN ──────→│ BEFORE FILTRATION │
               │       ↓           │        │       WiFi        │
               │ HEPA Filter       │        └─────────┬─────────┘
               │       ↓           │                  │
-              │ PM SENSOR #2      │           ┌──────┴──────────┐
-              │ AFTER FILTRATION  │           │ Lipo Rider Plus │
-              │       ↓           │           └──────┬──────────┘
-              │ Strong DC Blower  │                  │
-              └────────┬──────────┘                  ↓
-                       ↓                      ┌──────────────┐
-                    AIR OUT                   │ Battery      │
+              │ AFTER FILTRATION  │           ┌──────┴──────────┐
+              │       ↓           │           │ Lipo Rider Plus │
+              │ Strong DC Blower  │           └──────┬──────────┘
+              └────────┬──────────┘                  │
+                       ↓                             ↓
+                    AIR OUT                   ┌──────────────┐
+                                              │ Battery      │
                                               └──────────────┘
 ```
 
