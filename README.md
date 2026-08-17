@@ -236,3 +236,4 @@ The prototype's readings can be affected by environmental conditions such as **t
 The calculated reduction is based on the measurements from the prototype and should not be treated as professional air-quality certification.
 
 The **12V blower must be powered by a suitable external 12V DC power supply** and should not be powered directly from an Arduino GPIO pin.
+****
