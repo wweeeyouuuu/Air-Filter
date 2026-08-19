@@ -201,3 +201,18 @@ During system design, three main hardware challenges were identified and solved:
 | **DC Jack Module** | External Power | Plug interface for high-current fan power adapter |
 | **LiPo Rider Plus & Battery** | Battery Power | Portable power supply for Arduino and 5V sensors |
 | **Multi-Stage Filter Stack** | Mechanical Chamber | Physical & chemical filtration (Coffee/Cotton/Carbon/HEPA) |
+
+---
+
+## 🌱 Environmental Purpose & SDG Alignment
+
+### SDG 3 – Good Health and Well-Being
+
+This project directly aligns with **SDG 3 (Good Health and Well-Being)**, specifically **Target 3.9**, by demonstrating real-time indoor air purification and pollution monitoring. By actively removing hazardous airborne fine particles (PM2.5) and chemical gases (TVOC) from breathing space, the system mitigates respiratory exposure risks and helps safeguard personal lung health.
+
+---
+
+## ⚠️ Safety & Technical Notes
+
+* **High-Current Blower Power:** The 15W high-speed blower fan draws up to 3 Amps under load. It **must be powered via an external power supply through an IRLZ44N MOSFET driver circuit and DC Jack module**, and never directly from an Arduino I/O pin or low-current battery board.
+* **Sensor Calibration & Accuracy:** Prototype optical dust measurements are subject to air velocity and humidity fluctuations. Environmental measurements serve as an operational demonstration of relative purification performance rather than certified laboratory readings.
