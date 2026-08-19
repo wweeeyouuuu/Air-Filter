@@ -2,46 +2,47 @@
 
 ## 📌 Project Overview
 
-Our project is an **Air Pollution Monitoring and Mitigation System** that detects air pollution and tests how effectively a filtration system can reduce particulate matter and toxic gases.
+Our project is an **Air Pollution Monitoring and Mitigation System** that detects ambient air pollution and tests how effectively a multi-stage filtration system cleans particulate matter and toxic gases in real time.
 
-The filtration system is placed **inside a bottle**, while the Arduino Uno R4 WiFi, OLED display, Status LEDs, RGB NeoPixel Bargraphs, Lipo Rider Plus, and power management components are placed **beside the bottle**.
+By placing a PM sensor **before** the filters (at the front intake) and a second PM sensor **after** the filters (at the exhaust), the system calculates and displays the exact percentage of air pollution removed.
+
+The intake fan, filtration stack, and sensors are located **inside the bottle (chamber)**, while the Arduino Uno R4 WiFi, OLED display, Status LEDs, NeoPixel Bargraphs, Power Modules, and Control Circuit are mounted **beside the bottle**.
 
 ---
 
 ## 🎯 Objectives
 
-* Detect particulate matter (PM2.5) and total volatile organic compounds (TVOC / Gas).
-* Filter particles and gases from polluted air through physical and chemical filtration layers.
-* Measure environmental conditions (temperature and humidity) for sensor accuracy.
-* Display real-time telemetry on an OLED screen and stream data to the **Blynk Cloud**.
-* Use dual **10-LED RGB NeoPixel Strips** to display 1–10 severity levels for PM2.5 and Gas.
-* Use discrete **Green and Red Status LEDs** to indicate overall AQI state.
+* Measure particulate matter (PM2.5) at both intake and exhaust to show real-time filtration reduction percentage.
+* Detect Total Volatile Organic Compounds (TVOC / Gas).
+* Filter fine particles and hazardous gases through physical and chemical filter layers.
+* Measure temperature and humidity to correct optical dust sensor readings.
+* Display live metrics on an OLED screen and stream data to the **Blynk Cloud**.
+* Use dual **10-LED RGB NeoPixel Strips** to show 1–10 severity levels for PM2.5 and Gas.
+* Use **Green and Red Status LEDs** to show overall air quality status.
 * Automatically adjust fan purification speed based on Air Quality Index (AQI).
 
 ---
 
 ## 🌬️ How the Airflow Works
 
-Polluted air enters the bottle and passes through the sensors and filtration layers.
+The front blower fan forces polluted air into the top of the bottle, pushing it through the sensors, past the filter layers, and blowing clean air out through the bottom outlet.
 
 ```text
          AIR IN
             ↓
    ┌────────────────┐
-   │ HM3301 PM      │
+   │ Blower Fan     │  <-- 5500 RPM high-pressure turbine (Front Intake)
+   │ HM3301 #1 (IN) │  <-- Measures incoming polluted air
    │ DHT11          │
    │ SGP30 TVOC     │
    │                │
-   │ Coffee Filter  │
-   │                │
-   │ Cotton Layer   │
-   │                │
+   │ Coffee Filter  │  <-- Pre-filter (large dust/hair)
+   │ Cotton Layer   │  <-- Secondary physical filter
    │ ACTIVATED      │
-   │ CARBON         │
+   │ CARBON         │  <-- Absorbs chemical gas & odors
+   │ HEPA FILTER    │  <-- Traps fine micro-particles
    │                │
-   │ HEPA FILTER    │
-   │                │
-   │ 12V DC Fan     │
+   │ HM3301 #2 (OUT)│  <-- Measures clean filtered air
    └────────┬───────┘
             ↓
          AIR OUT
@@ -50,138 +51,131 @@ Polluted air enters the bottle and passes through the sensors and filtration lay
 
 ---
 
-## 🧴 Inside the Bottle
+## 🧴 Inside the Bottle (Chamber)
 
-The bottle acts as the **airflow and filtration chamber**.
-
-### HM3301 PM2.5 Sensor
-
-Measures real-time particulate matter concentration ($\mu\text{g/m}^3$) before filtration using laser light scattering.
-
-### DHT11 Sensor
-
-Measures **Temperature** and **Relative Humidity**. Humidity directly affects optical PM sensor accuracy because airborne particles absorb moisture and swell, altering light scattering. Measuring humidity enables accurate sensor compensation.
-
-### SGP30 Gas Sensor
-
-Measures Total Volatile Organic Compounds (**TVOC** in ppb) with absolute humidity compensation applied dynamically from the DHT11 readings.
-
-### Coffee Filter
-
-Acts as a **pre-filter** to catch coarse dust and large airborne debris.
-
-### Cotton Layer
-
-Provides secondary physical filtration for medium-sized particles.
-
-### Activated Carbon
-
-Adsorbs volatile organic compounds, chemical gases, and odors.
-
-### HEPA Filter
-
-Captures fine particulate matter down to 0.3 microns.
-
-### 12V DC Fan (Transistor PWM Driven)
-
-Pulls air through the entire filtration chamber at variable speeds based on AQI demand.
+* **High-Speed Front Blower Fan (5500 RPM / 15W):** Mounted at the front intake to actively blow polluted air directly into the filter stack.
+* **Dual HM3301 PM2.5 Sensors:** Sensor #1 measures raw polluted air at the intake. Sensor #2 measures clean air at the exhaust. Comparing both gives the exact filtration reduction percentage.
+* **DHT11 Sensor:** Measures temperature and relative humidity so the system can adjust optical sensor readings when air moisture is high.
+* **SGP30 Gas Sensor:** Measures Total Volatile Organic Compounds (TVOC in ppb) for gas pollution.
+* **Coffee Filter:** Acts as a pre-filter to catch coarse dust and debris.
+* **Cotton Layer:** Traps medium-sized floating particles.
+* **Activated Carbon:** Absorbs chemical fumes, smoke, and odors.
+* **HEPA Filter:** Traps tiny fine particles down to 0.3 microns.
 
 ---
 
 ## 🔌 Electronics Beside the Bottle
 
-The electronic control and visual indicators are kept **outside the bottle**.
-
-### Arduino Uno R4 WiFi
-
-The core microcontroller processing sensor data, controlling hardware outputs, driving displays, and syncing with the Blynk Cloud over Wi-Fi.
-
-### OLED Display (SSD1306 128x64)
-
-Provides a local user interface showing live AQI, PM2.5, TVOC, Fan Speed %, Temperature, and Humidity.
+* **Arduino Uno R4 WiFi:** Main controller processing sensor data, controlling fan speeds, updating displays, and sending Wi-Fi data to Blynk Cloud.
+* **TCA9548A I2C Multiplexer (Purple Board):** Lets the Arduino talk to two identical HM3301 sensors without signal conflicts.
+* **MOSFET Control Circuit:** Safely controls fan speed using an IRLZ44N MOSFET, 200 Ohm resistor, 20k Ohm resistor, 1N4007 diode, and DC Jack module.
+* **OLED Display (SSD1306):** Local 128x64 screen showing live AQI, PM2.5 before, PM2.5 after, reduction percentage, TVOC gas, fan speed %, temperature, and humidity.
 
 ```text
 ┌─────────────────────┐
-│ AQI: 82             │
-│ PM2.5 : 65 ug/m³    │
-│ VOC   : 10 ppb      │
-│ FAN   : 78%         │
-│ T: 29C   H: 68%     │
+│ AQI       : 82      │
+│ PM2.5 bf  : 65 ug/m³│
+│ PM2.5 af  : 10 ug/m³│
+│ REDUCTION : 84.6%   │
+│ VOC       : 10 ppb  │
+│ FAN       : 78%     │
+│ T: 29C    H: 68%    │
 └─────────────────────┘
 
 ```
 
-### 🚥 System Status LEDs (Pins D7 & D8)
-
-Indicates the overall air quality classification based strictly on calculated **AQI**:
-
-* 🟢 **Solid Green LED (Pin D7):** Healthy Air (AQI 0 – 50)
-* 🟢 **Blinking Green LED (Pin D7):** Moderate Air (AQI 51 – 100)
-* 🔴 **Solid Red LED (Pin D8):** Unhealthy Air (AQI > 100)
-
-### 📊 Dual 10-LED RGB NeoPixel Bargraphs (Pins D2 & D3)
-
-Two separate 10-LED addressable RGB strips visualize severe level meters (1–10 lights active):
-
-* **Pin D2 Strip:** Displays PM2.5 severity level
-* **Pin D3 Strip:** Displays TVOC Gas severity level
-* **Color Zones per Strip:**
-* LEDs 1–3: 🟢 **Green** (Low)
-* LEDs 4–6: 🟡 **Yellow** (Moderate)
-* LEDs 7–10: 🔴 **Red** (High)
+* **Status LEDs (Pins D7 & D8):**
+* 🟢 **Solid Green LED (D7):** Healthy Air (AQI 0–50)
+* 🟢 **Blinking Green LED (D7):** Moderate Air (AQI 51–100)
+* 🔴 **Solid Red LED (D8):** Unhealthy Air (AQI > 100)
 
 
+* **Dual 10-LED RGB NeoPixel Strips (Pins D2 & D3):**
+* **Pin D2 Strip:** PM2.5 severity level meter (1 to 10 lights)
+* **Pin D3 Strip:** TVOC Gas severity level meter (1 to 10 lights)
+* **Color Zones:** LEDs 1–3 (🟢 Green), LEDs 4–6 (🟡 Yellow), LEDs 7–10 (🔴 Red)
 
-### LiPo Rider Plus & LiPo Battery
 
-Manages battery charging and boosts power to run the microcontroller setup portably.
+* **LiPo Rider Plus & Battery:** Powers the Arduino, OLED, sensors, and LED lights portably via USB.
+* **DC Wall Supply + DC Jack Module:** Powers the high-power blower fan separately so it doesn't overload the Arduino.
 
 ---
 
 ## ⚙️ How the System Works
 
-1. Polluted air enters the intake chamber.
-2. The **HM3301 PM Sensor** reads PM2.5 particle density ($\mu\text{g/m}^3$).
-3. The **SGP30 Gas Sensor** measures TVOC levels (ppb) with humidity compensation from the **DHT11**.
-4. Arduino maps PM2.5 and TVOC values into **10-level bargraph outputs** for the NeoPixel strips on D2 and D3.
-5. Arduino calculates overall **AQI** from PM2.5:
-* **AQI 0–50 (Healthy):** Solid Green LED ON | Fan Speed = **PWM 100**
-* **AQI 51–100 (Moderate):** Blinking Green LED | Fan Speed = **PWM 200**
-* **AQI > 100 (Unhealthy):** Solid Red LED ON | Fan Speed = **PWM 230**
+1. The **Front Blower Fan** drives polluted air into the intake chamber.
+2. **HM3301 Sensor #1** reads incoming PM2.5 levels (`PM2.5 bf`).
+3. **SGP30 Sensor** reads gas levels (TVOC) with humidity correction from the **DHT11**.
+4. The Arduino calculates overall **AQI** and sets fan speed:
+* **AQI 0–50 (Healthy):** Solid Green LED ON | Fan Speed = **40% (PWM 100)**
+* **AQI 51–100 (Moderate):** Blinking Green LED | Fan Speed = **80% (PWM 200)**
+* **AQI > 100 (Unhealthy):** Solid Red LED ON | Fan Speed = **90% (PWM 230)**
 
 
-6. Air passes through Coffee Filter $\rightarrow$ Cotton $\rightarrow$ Activated Carbon $\rightarrow$ HEPA Filter.
-7. Telemetry data updates on the local **OLED Display** and transmits over Wi-Fi to the **Blynk IoT Dashboard**.
+5. Air is forced through Coffee Filter ➔ Cotton ➔ Activated Carbon ➔ HEPA Filter.
+6. Clean air passes **HM3301 Sensor #2** at the output (`PM2.5 af`).
+7. Arduino calculates filtration reduction percentage and sends telemetry to the **OLED Screen** and **Blynk IoT App**.
+
+---
+
+## 🛠️ Technical Problems & Hardware Resolutions
+
+During system design, three main hardware challenges were identified and solved:
+
+### Resolution 1: Dual I2C Address Conflict
+
+* **Problem:** Both HM3301 dust sensors have the exact same factory I2C address (`0x40`). Plugging both directly into the Arduino causes data corruption and crashes the system.
+* **Resolution:** Added a **TCA9548A I2C Multiplexer module (Purple Board)**. It allows the Arduino to switch between Channel 0 (Intake Sensor) and Channel 1 (Exhaust Sensor) seamlessly.
+
+### Resolution 2: High Fan Power Demand
+
+* **Problem:** The 15W high-speed blower fan draws up to 3 Amps of current. Arduino digital pins can only output 0.015 Amps, and battery modules max out at 2 Amps. Connecting the fan directly to the Arduino will burn the microcontroller.
+* **Resolution:** Used an **IRLZ44N MOSFET Circuit** connected to an external high-current power supply via a **DC Jack Module**. The Arduino pin only sends a tiny 5V control signal to the MOSFET gate, while external power runs directly to the fan.
+
+### Resolution 3: Shared Ground & Motor Spike Protection
+
+* **Problem:** High-power motors create inductive voltage spikes when turning off, which can destroy digital electronics or reset the microcontroller.
+* **Resolution:** Added a **1N4007 flyback diode** across the fan terminals to absorb voltage spikes, a **20k Ohm pull-down resistor** to keep the fan off during bootup, and linked the DC Jack ground directly to Arduino GND so control signals stay stable.
 
 ---
 
 ## 🔗 System Layout
 
 ```text
-                    🧴 BOTTLE                               ELECTRONICS
-
-              ┌───────────────────┐
-              │ HM3301 PM Sensor  │
-AIR IN ──────→│ SGP30 Gas Sensor  │───────I2C───────┐
-              │ DHT11 Sensor      │                 │
-              │                   │                 ▼
-              │ Coffee Filter     │        ┌───────────────────┐      ☁️ BLYNK CLOUD
-              │        ↓          │        │                   │──────(WiFi Dashboard)
-              │ Cotton Layer      │        │                   │
-              │        ↓          │        │  Arduino Uno R4   │      🖥️ OLED DISPLAY
-              │ Activated Carbon  │        │       WiFi        │──────(128x64 I2C)
-              │        ↓          │        │                   │
-              │ HEPA Filter       │        └─┬───┬───┬───┬───┬─┘
-              │        ↓          │          │   │   │   │   │
-              │ 12V DC Fan (PWM)  │◄──D5─────┘   │   │   │   └───D7 ──► 🟢 GREEN LED (Status)
-              └────────┬──────────┘              │   │   └───────D8 ──► 🔴 RED LED (Status)
-                       ↓                         │   └───────────D2 ──► 📊 10-LED RGB Strip (PM)
-                    AIR OUT                      └───────────────D3 ──► 📊 10-LED RGB Strip (Gas)
-                                                                 │
-                                                                 ▼
-                                                        ┌─────────────────┐
-                                                        │ Lipo Rider Plus │◄──► 🔋 LiPo Battery
-                                                        └─────────────────┘
+                  🧴 BOTTLE (CHAMBER)                                     ELECTRONICS
+          ┌───────────────────────────────────┐
+          │ 15W Front Blower Fan              │◄─── D5 (PWM Control Signal)
+ AIR IN ─►│ HM3301 #1 (Intake PM)             │
+          │ SGP30 Gas Sensor                  │
+          │ DHT11 Temp & Humidity             │
+          │                                   │       ┌──────────────────────┐
+          │ Coffee Filter ──► Cotton Layer    │       │ TCA9548A Multiplexer │
+          │       │                           │◄─I2C──│ (Channel 0 & 1)      │
+          │ Activated Carbon ──► HEPA Filter  │       └──────────┬───────────┘
+          │       │                           │                  │ I2C Main Bus
+          │ HM3301 #2 (Exhaust PM)            │                  ▼
+          └───────────────┬───────────────────┘       ┌──────────────────────┐
+                          │                           │                      │──────(WiFi)─────► ☁️ BLYNK CLOUD
+                       AIR OUT                        │                      │
+                                                      │  Arduino Uno R4 WiFi │──────(I2C)──────► 🖥️ OLED DISPLAY
+                                                      │                      │
+                                                      └─┬───┬───┬───┬───┬────┘
+                                                        │   │   │   │   │
+                                                        │   │   │   │   └──D7 ──► 🟢 GREEN LED (Status)
+                                                        │   │   │   └──────D8 ──► 🔴 RED LED (Status)
+                                                        │   │   └──────────D2 ──► 📊 10-LED RGB Strip (PM)
+                                                        │   └──────────────D3 ──► 📊 10-LED RGB Strip (Gas)
+                                                        │
+                                                       D5 (PWM)
+                                                        │
+                                                        ▼
+                                           ┌──────────────────────────┐
+                                           │ IRLZ44N MOSFET Driver    │◄─── Wall Power Adapter (DC Jack)
+                                           │ (Resistors + Diode)      │
+                                           └──────────────────────────┘
+                                                        │
+                                                        ▼
+                                              LiPo Rider + Battery (USB) ──► Powers Arduino & Sensors
 
 ```
 
@@ -191,31 +185,19 @@ AIR IN ──────→│ SGP30 Gas Sensor  │───────I2C─
 
 | Component | Pin / Interface | Function |
 | --- | --- | --- |
-| **Arduino Uno R4 WiFi** | Main MCU | Central processor, logic, Wi-Fi telemetry |
-| **HM3301 PM Sensor** | I2C (`0x40`) | Measures PM2.5 concentration ($\mu\text{g/m}^3$) |
-| **SGP30 Gas Sensor** | I2C (`0x58`) | Measures TVOC gas concentration (ppb) |
-| **DHT11 Sensor** | Digital Pin `D6` | Measures Temperature and Relative Humidity |
-| **OLED Display (SSD1306)** | I2C (`0x3C`) | Displays 128x64 live system telemetry |
-| **Green Status LED** | Digital Pin `D7` | Solid ON (AQI 0–50), Blinking (AQI 51–100) |
-| **Red Status LED** | Digital Pin `D8` | Solid ON (AQI > 100) |
-| **PM NeoPixel Strip** | Digital Pin `D2` | 10-LED RGB Bargraph (PM2.5 Level 1–10) |
-| **Gas NeoPixel Strip** | Digital Pin `D3` | 10-LED RGB Bargraph (TVOC Level 1–10) |
-| **12V DC Blower Fan** | Digital Pin `D5` (PWM) | Air intake driver (PWM 100 / 200 / 230) |
-| **NPN Transistor / MOSFET** | Circuit Interface | Safely switches 12V fan power via Arduino D5 |
-| **Filter Media** | Physical Chamber | Coffee filter, Cotton, Activated Carbon, HEPA |
-| **LiPo Rider Plus & Battery** | Power | Power management and portable battery supply |
-
----
-
-## 🌱 Environmental Purpose & SDG Alignment
-
-### SDG 13 – Climate Action & SDG 3 – Good Health and Well-Being
-
-This project demonstrates actionable monitoring and air purification logic by comparing particulate concentration against multi-stage filtration capabilities in real time.
-
----
-
-## ⚠️ Safety & Technical Note
-
-* **12V Fan Power:** The 12V DC fan draws higher current than microcontrollers can supply. It **must be powered via an external 12V supply or boosted line via a driver transistor/MOSFET**, never directly from an Arduino I/O pin.
-* **Sensor Accuracy:** Prototype measurements are affected by humidity and airflow velocity; values serve as an operational demonstration rather than certified laboratory readings.
+| **Arduino Uno R4 WiFi** | Main Controller | Brain of system, data processing, Wi-Fi telemetry |
+| **TCA9548A Multiplexer** | I2C (`0x70`) | Resolves address conflict for dual PM sensors |
+| **HM3301 PM Sensor #1** | TCA Channel 0 (`SD0/SC0`) | Measures raw incoming particulate matter (`PM2.5 bf`) |
+| **HM3301 PM Sensor #2** | TCA Channel 1 (`SD1/SC1`) | Measures clean exhaust particulate matter (`PM2.5 af`) |
+| **SGP30 Gas Sensor** | I2C (`0x58`) | Measures TVOC toxic gas concentration |
+| **DHT11 Sensor** | Digital Pin `D6` | Measures temperature and humidity |
+| **OLED Display (SSD1306)** | I2C (`0x3C`) | Local readout showing AQI, values, and reduction % |
+| **Green Status LED** | Digital Pin `D7` | Solid ON (Healthy), Blinking (Moderate) |
+| **Red Status LED** | Digital Pin `D8` | Solid ON (Unhealthy) |
+| **PM NeoPixel Strip** | Digital Pin `D2` | 10-LED RGB Bargraph (PM2.5 severity meter) |
+| **Gas NeoPixel Strip** | Digital Pin `D3` | 10-LED RGB Bargraph (TVOC gas severity meter) |
+| **15W Blower Fan** | Digital Pin `D5` (PWM) | Front air intake driver, pushes air through filters (5500 RPM) |
+| **MOSFET Control Board** | Circuit Interface | IRLZ44N + Resistors + Diode for safe fan switching |
+| **DC Jack Module** | External Power | Plug interface for high-current fan power adapter |
+| **LiPo Rider Plus & Battery** | Battery Power | Portable power supply for Arduino and 5V sensors |
+| **Multi-Stage Filter Stack** | Mechanical Chamber | Physical & chemical filtration (Coffee/Cotton/Carbon/HEPA) |
