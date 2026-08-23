@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-Our project is an **Air Pollution Monitoring and Mitigation System** that detects ambient air pollution and tests how effectively a multi-stage filtration system cleans particulate matter and toxic gases in real time.
+Our project is an **Air Pollution Monitoring and Mitigation System** that detects ambient air pollution and tests how effectively a multi-stage filtration system cleans particulate matter ($\text{PM}_{2.5}$) and toxic gases in real time.
 
 By placing a PM sensor **before** the filters (at the front intake) and a second PM sensor **after** the filters (at the exhaust), the system calculates and displays the exact percentage of air pollution removed.
 
@@ -12,12 +12,12 @@ The intake fan, filtration stack, and sensors are located **inside the bottle (c
 
 ## 🎯 Objectives
 
-* Measure particulate matter (PM2.5) at both intake and exhaust to show real-time filtration reduction percentage.
+* Measure particulate matter ($\text{PM}_{2.5}$) at both intake and exhaust to show real-time filtration reduction percentage.
 * Detect Total Volatile Organic Compounds (TVOC / Gas).
 * Filter fine particles and hazardous gases through physical and chemical filter layers.
 * Measure temperature and humidity to correct optical dust sensor readings.
 * Display live metrics on an OLED screen and stream data to the **Blynk Cloud**.
-* Use dual **10-LED RGB NeoPixel Strips** to show 1–10 severity levels for PM2.5 and Gas.
+* Use dual **10-LED RGB NeoPixel Strips** to compare $\text{PM}_{2.5}$ levels before intake vs. after exhaust (1–10 severity levels).
 * Use **Green and Red Status LEDs** to show overall air quality status.
 * Automatically adjust fan purification speed based on Air Quality Index (AQI).
 
@@ -32,17 +32,16 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
             ↓
    ┌────────────────┐
    │ Blower Fan     │  <-- 5500 RPM high-pressure turbine (Front Intake)
-   │ HM3301 #1 (IN) │  <-- Measures incoming polluted air
+   │ HM3301 #1 (IN) │  <-- Measures incoming polluted air (PM2.5 IN)
    │ DHT11          │
    │ SGP30 TVOC     │
    │                │
-   │ Coffee Filter  │  <-- Pre-filter (large dust/hair)
-   │ Cotton Layer   │  <-- Secondary physical filter
-   │ ACTIVATED      │
-   │ CARBON         │  <-- Absorbs chemical gas & odors
-   │ HEPA FILTER    │  <-- Traps fine micro-particles
+   │ Raw Cotton     │  <-- Pre-filter (large dust/hair/coarse debris)
+   │ Cotton Pad     │  <-- Secondary medium particle capture layer
+   │ Teabag Layer   │  <-- Porous micro-mesh & organic odor/gas absorber
+   │ HEPA Filter    │  <-- Traps fine sub-micron particulates (PM2.5)
    │                │
-   │ HM3301 #2 (OUT)│  <-- Measures clean filtered air
+   │ HM3301 #2 (OUT)│  <-- Measures clean filtered air (PM2.5 OUT)
    └────────┬───────┘
             ↓
          AIR OUT
@@ -54,13 +53,13 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 ## 🧴 Inside the Bottle (Chamber)
 
 * **High-Speed Front Blower Fan (5500 RPM / 15W):** Mounted at the front intake to actively blow polluted air directly into the filter stack.
-* **Dual HM3301 PM2.5 Sensors:** Sensor #1 measures raw polluted air at the intake. Sensor #2 measures clean air at the exhaust. Comparing both gives the exact filtration reduction percentage.
+* **Dual HM3301 $\text{PM}_{2.5}$ Sensors:** Sensor #1 measures raw polluted air at the intake. Sensor #2 measures clean air at the exhaust. Comparing both gives the exact filtration reduction percentage.
 * **DHT11 Sensor:** Measures temperature and relative humidity so the system can adjust optical sensor readings when air moisture is high.
 * **SGP30 Gas Sensor:** Measures Total Volatile Organic Compounds (TVOC in ppb) for gas pollution.
-* **Coffee Filter:** Acts as a pre-filter to catch coarse dust and debris.
-* **Cotton Layer:** Traps medium-sized floating particles.
-* **Activated Carbon:** Absorbs chemical fumes, smoke, and odors.
-* **HEPA Filter:** Traps tiny fine particles down to 0.3 microns.
+* **Raw Cotton:** Acts as an initial coarse pre-filter to catch large dust particles, hair, and floating fibers.
+* **Cotton Pad:** High-density layered fibers that trap medium-sized airborne dust and particles.
+* **Teabag Layer:** Fine porous plant-fiber mesh that provides micro-stage physical screening and light gas/odor filtration.
+* **HEPA Filter:** High-efficiency particle layer that traps tiny micro-particles down to 0.3 microns ($\text{PM}_{2.5}$).
 
 ---
 
@@ -69,7 +68,7 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 * **Arduino Uno R4 WiFi:** Main controller processing sensor data, controlling fan speeds, updating displays, and sending Wi-Fi data to Blynk Cloud.
 * **TCA9548A I2C Multiplexer (Purple Board):** Lets the Arduino talk to two identical HM3301 sensors without signal conflicts.
 * **MOSFET Control Circuit:** Safely controls fan speed using an IRLZ44N MOSFET, 200 Ohm resistor, 20k Ohm resistor, 1N4007 diode, and DC Jack module.
-* **OLED Display (SSD1306):** Local 128x64 screen showing live AQI, PM2.5 before, PM2.5 after, reduction percentage, TVOC gas, fan speed %, temperature, and humidity.
+* **OLED Display (SSD1306):** Local 128x64 screen showing live AQI, $\text{PM}_{2.5}$ before, $\text{PM}_{2.5}$ after, reduction percentage, TVOC gas, fan speed %, temperature, and humidity.
 
 ```text
 ┌─────────────────────┐
@@ -91,8 +90,8 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 
 
 * **Dual 10-LED RGB NeoPixel Strips (Pins D2 & D3):**
-* **Pin D2 Strip:** PM2.5 severity level meter (1 to 10 lights)
-* **Pin D3 Strip:** TVOC Gas severity level meter (1 to 10 lights)
+* **Pin D2 Strip ($\text{PM}_{2.5}$ IN):** Visualizes incoming raw particulate matter severity (1 to 10 lights)
+* **Pin D3 Strip ($\text{PM}_{2.5}$ OUT):** Visualizes filtered output particulate matter severity (1 to 10 lights)
 * **Color Zones:** LEDs 1–3 (🟢 Green), LEDs 4–6 (🟡 Yellow), LEDs 7–10 (🔴 Red)
 
 
@@ -104,7 +103,7 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 ## ⚙️ How the System Works
 
 1. The **Front Blower Fan** drives polluted air into the intake chamber.
-2. **HM3301 Sensor #1** reads incoming PM2.5 levels (`PM2.5 bf`).
+2. **HM3301 Sensor #1** reads incoming $\text{PM}_{2.5}$ levels (`PM2.5 bf`) and updates the **D2 RGB Strip ($\text{PM}_{2.5}$ IN)**.
 3. **SGP30 Sensor** reads gas levels (TVOC) with humidity correction from the **DHT11**.
 4. The Arduino calculates overall **AQI** and sets fan speed:
 * **AQI 0–50 (Healthy):** Solid Green LED ON | Fan Speed = **40% (PWM 100)**
@@ -112,8 +111,8 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 * **AQI > 100 (Unhealthy):** Solid Red LED ON | Fan Speed = **90% (PWM 230)**
 
 
-5. Air is forced through Coffee Filter ➔ Cotton ➔ Activated Carbon ➔ HEPA Filter.
-6. Clean air passes **HM3301 Sensor #2** at the output (`PM2.5 af`).
+5. Air is forced through Raw Cotton ➔ Cotton Pad ➔ Teabag Layer ➔ HEPA Filter.
+6. Clean air passes **HM3301 Sensor #2** at the output (`PM2.5 af`) and updates the **D3 RGB Strip ($\text{PM}_{2.5}$ OUT)**.
 7. Arduino calculates filtration reduction percentage and sends telemetry to the **OLED Screen** and **Blynk IoT App**.
 
 ---
@@ -142,39 +141,39 @@ During system design, three main hardware challenges were identified and solved:
 ## 🔗 System Layout
 
 ```text
-                  🧴 BOTTLE (CHAMBER)                                     ELECTRONICS
+                🧴 BOTTLE (CHAMBER)                                     ELECTRONICS
           ┌───────────────────────────────────┐
           │ 15W Front Blower Fan              │◄─── D5 (PWM Control Signal)
  AIR IN ─►│ HM3301 #1 (Intake PM)             │
           │ SGP30 Gas Sensor                  │
           │ DHT11 Temp & Humidity             │
-          │                                   │       ┌──────────────────────┐
-          │ Coffee Filter ──► Cotton Layer    │       │ TCA9548A Multiplexer │
+          │                                   │        ┌──────────────────────┐
+          │ Raw Cotton ──► Cotton Pad         │        │ TCA9548A Multiplexer │
           │       │                           │◄─I2C──│ (Channel 0 & 1)      │
-          │ Activated Carbon ──► HEPA Filter  │       └──────────┬───────────┘
-          │       │                           │                  │ I2C Main Bus
-          │ HM3301 #2 (Exhaust PM)            │                  ▼
-          └───────────────┬───────────────────┘       ┌──────────────────────┐
-                          │                           │                      │──────(WiFi)─────► ☁️ BLYNK CLOUD
-                       AIR OUT                        │                      │
-                                                      │  Arduino Uno R4 WiFi │──────(I2C)──────► 🖥️ OLED DISPLAY
-                                                      │                      │
-                                                      └─┬───┬───┬───┬───┬────┘
-                                                        │   │   │   │   │
-                                                        │   │   │   │   └──D7 ──► 🟢 GREEN LED (Status)
-                                                        │   │   │   └──────D8 ──► 🔴 RED LED (Status)
-                                                        │   │   └──────────D2 ──► 📊 10-LED RGB Strip (PM)
-                                                        │   └──────────────D3 ──► 📊 10-LED RGB Strip (Gas)
-                                                        │
-                                                       D5 (PWM)
-                                                        │
-                                                        ▼
-                                           ┌──────────────────────────┐
-                                           │ IRLZ44N MOSFET Driver    │◄─── Wall Power Adapter (DC Jack)
-                                           │ (Resistors + Diode)      │
-                                           └──────────────────────────┘
-                                                        │
-                                                        ▼
+          │ Teabag Layer ──► HEPA Filter      │        └──────────┬───────────┘
+          │       │                           │                   │ I2C Main Bus
+          │ HM3301 #2 (Exhaust PM)            │                   ▼
+          └───────────────┬───────────────────┘        ┌──────────────────────┐
+                          │                            │                      │──────(WiFi)─────► ☁️ BLYNK CLOUD
+                       AIR OUT                         │                      │
+                                                       │  Arduino Uno R4 WiFi │──────(I2C)──────► 🖥️ OLED DISPLAY
+                                                       │                      │
+                                                       └─┬───┬───┬───┬───┬────┘
+                                                         │   │   │   │   │
+                                                         │   │   │   │   └──D7 ──► 🟢 GREEN LED (Status)
+                                                         │   │   │   └──────D8 ──► 🔴 RED LED (Status)
+                                                         │   │   └──────────D2 ──► 📊 10-LED RGB Strip (PM2.5 IN)
+                                                         │   └──────────────D3 ──► 📊 10-LED RGB Strip (PM2.5 OUT)
+                                                         │
+                                                        D5 (PWM)
+                                                         │
+                                                         ▼
+                                            ┌──────────────────────────┐
+                                            │ IRLZ44N MOSFET Driver    │◄─── Wall Power Adapter (DC Jack)
+                                            │ (Resistors + Diode)      │
+                                            └──────────────────────────┘
+                                                         │
+                                                         ▼
                                               LiPo Rider + Battery (USB) ──► Powers Arduino & Sensors
 
 ```
@@ -194,13 +193,13 @@ During system design, three main hardware challenges were identified and solved:
 | **OLED Display (SSD1306)** | I2C (`0x3C`) | Local readout showing AQI, values, and reduction % |
 | **Green Status LED** | Digital Pin `D7` | Solid ON (Healthy), Blinking (Moderate) |
 | **Red Status LED** | Digital Pin `D8` | Solid ON (Unhealthy) |
-| **PM NeoPixel Strip** | Digital Pin `D2` | 10-LED RGB Bargraph (PM2.5 severity meter) |
-| **Gas NeoPixel Strip** | Digital Pin `D3` | 10-LED RGB Bargraph (TVOC gas severity meter) |
+| **PM IN NeoPixel Strip** | Digital Pin `D2` | 10-LED RGB Bargraph ($\text{PM}_{2.5}$ intake severity meter) |
+| **PM OUT NeoPixel Strip** | Digital Pin `D3` | 10-LED RGB Bargraph ($\text{PM}_{2.5}$ exhaust severity meter) |
 | **15W Blower Fan** | Digital Pin `D5` (PWM) | Front air intake driver, pushes air through filters (5500 RPM) |
 | **MOSFET Control Board** | Circuit Interface | IRLZ44N + Resistors + Diode for safe fan switching |
 | **DC Jack Module** | External Power | Plug interface for high-current fan power adapter |
 | **LiPo Rider Plus & Battery** | Battery Power | Portable power supply for Arduino and 5V sensors |
-| **Multi-Stage Filter Stack** | Mechanical Chamber | Physical & chemical filtration (Coffee/Cotton/Carbon/HEPA) |
+| **Multi-Stage Filter Stack** | Mechanical Chamber | Physical & chemical filtration (Raw Cotton/Cotton Pad/Teabag/HEPA) |
 
 ---
 
@@ -208,7 +207,7 @@ During system design, three main hardware challenges were identified and solved:
 
 ### SDG 3 – Good Health and Well-Being
 
-This project directly aligns with **SDG 3 (Good Health and Well-Being)**, specifically **Target 3.9**, by demonstrating real-time indoor air purification and pollution monitoring. By actively removing hazardous airborne fine particles (PM2.5) and chemical gases (TVOC) from breathing space, the system mitigates respiratory exposure risks and helps safeguard personal lung health.
+This project directly aligns with **SDG 3 (Good Health and Well-Being)**, specifically **Target 3.9**, by demonstrating real-time indoor air purification and pollution monitoring. By actively removing hazardous airborne fine particles ($\text{PM}_{2.5}$) and chemical gases (TVOC) from breathing space, the system mitigates respiratory exposure risks and helps safeguard personal lung health.
 
 ---
 
