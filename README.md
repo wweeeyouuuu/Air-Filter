@@ -72,13 +72,13 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 
 ```text
 ┌─────────────────────┐
-│ AQI       : 82      │
-│ PM2.5 bf  : 65 ug/m³│
-│ PM2.5 af  : 10 ug/m³│
+│ AQI        : 82     │
+│ PM2.5 bf   : 65 ug/m³│
+│ PM2.5 af   : 10 ug/m³│
 │ REDUCTION : 84.6%   │
-│ VOC       : 10 ppb  │
-│ FAN       : 78%     │
-│ T: 29C    H: 68%    │
+│ VOC        : 10 ppb │
+│ FAN        : 78%    │
+│ T: 29C     H: 68%   │
 └─────────────────────┘
 
 ```
@@ -92,8 +92,23 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 * **Dual 10-LED RGB NeoPixel Strips (Pins D2 & D3):**
 * **Pin D2 Strip ($\text{PM}_{2.5}$ IN):** Visualizes incoming raw particulate matter severity (1 to 10 lights)
 * **Pin D3 Strip ($\text{PM}_{2.5}$ OUT):** Visualizes filtered output particulate matter severity (1 to 10 lights)
-* **Color Zones:** LEDs 1–3 (🟢 Green), LEDs 4–6 (🟡 Yellow), LEDs 7–10 (🔴 Red)
 
+
+
+### 📊 LED Severity Scale & Air Threshold Mapping
+
+| LEVEL | $\text{PM}_{2.5}$ VALUE ($\mu\text{g/m}^3$) | GAS VALUE ($0–1023$) | Color Guide | Air Quality Status |
+| --- | --- | --- | --- | --- |
+| **1** | $< 20$ | $< 150$ | 🟢 Green | Level 1 – 3 (Good / Safe) |
+| **2** | $20 - 29$ | $150 - 249$ | 🟢 Green | Level 1 – 3 (Good / Safe) |
+| **3** | $30 - 39$ | $250 - 349$ | 🟢 Green | Level 1 – 3 (Good / Safe) |
+| **4** | $40 - 44$ | $350 - 419$ | 🟡 Yellow | Level 4 – 6 (Moderate) |
+| **5** | $45 - 49$ | $420 - 499$ | 🟡 Yellow | Level 4 – 6 (Moderate) |
+| **6** | $50 - 54$ | $500 - 579$ | 🟡 Yellow | Level 4 – 6 (Moderate) |
+| **7** | $55 - 59$ | $580 - 649$ | 🔴 Red | Level 7 – 10 (Poor / Hazardous) |
+| **8** | $60 - 64$ | $650 - 719$ | 🔴 Red | Level 7 – 10 (Poor / Hazardous) |
+| **9** | $65 - 69$ | $720 - 799$ | 🔴 Red | Level 7 – 10 (Poor / Hazardous) |
+| **10** | $\ge 70$ | $\ge 800$ | 🔴 Red | Level 7 – 10 (Poor / Hazardous) |
 
 * **LiPo Rider Plus & Battery:** Powers the Arduino, OLED, sensors, and LED lights portably via USB.
 * **DC Wall Supply + DC Jack Module:** Powers the high-power blower fan separately so it doesn't overload the Arduino.
@@ -103,7 +118,7 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 ## ⚙️ How the System Works
 
 1. The **Front Blower Fan** drives polluted air into the intake chamber.
-2. **HM3301 Sensor #1** reads incoming $\text{PM}_{2.5}$ levels (`PM2.5 bf`) and updates the **D2 RGB Strip ($\text{PM}_{2.5}$ IN)**.
+2. **HM3301 Sensor #1** reads incoming $\text{PM}_{2.5}$ levels (`PM2.5 bf`) and updates the **D2 RGB Strip ($\text{PM}_{2.5}$ IN)** according to Levels 1–10.
 3. **SGP30 Sensor** reads gas levels (TVOC) with humidity correction from the **DHT11**.
 4. The Arduino calculates overall **AQI** and sets fan speed:
 * **AQI 0–50 (Healthy):** Solid Green LED ON | Fan Speed = **40% (PWM 100)**
@@ -112,7 +127,7 @@ The front blower fan forces polluted air into the top of the bottle, pushing it 
 
 
 5. Air is forced through Raw Cotton ➔ Cotton Pad ➔ Teabag Layer ➔ HEPA Filter.
-6. Clean air passes **HM3301 Sensor #2** at the output (`PM2.5 af`) and updates the **D3 RGB Strip ($\text{PM}_{2.5}$ OUT)**.
+6. Clean air passes **HM3301 Sensor #2** at the output (`PM2.5 af`) and updates the **D3 RGB Strip ($\text{PM}_{2.5}$ OUT)** according to Levels 1–10.
 7. Arduino calculates filtration reduction percentage and sends telemetry to the **OLED Screen** and **Blynk IoT App**.
 
 ---
@@ -149,9 +164,9 @@ During system design, three main hardware challenges were identified and solved:
           │ DHT11 Temp & Humidity             │
           │                                   │        ┌──────────────────────┐
           │ Raw Cotton ──► Cotton Pad         │        │ TCA9548A Multiplexer │
-          │       │                           │◄─I2C──│ (Channel 0 & 1)      │
+          │        │                          │◄─I2C──│ (Channel 0 & 1)      │
           │ Teabag Layer ──► HEPA Filter      │        └──────────┬───────────┘
-          │       │                           │                   │ I2C Main Bus
+          │        │                          │                   │ I2C Main Bus
           │ HM3301 #2 (Exhaust PM)            │                   ▼
           └───────────────┬───────────────────┘        ┌──────────────────────┐
                           │                            │                      │──────(WiFi)─────► ☁️ BLYNK CLOUD
@@ -193,8 +208,8 @@ During system design, three main hardware challenges were identified and solved:
 | **OLED Display (SSD1306)** | I2C (`0x3C`) | Local readout showing AQI, values, and reduction % |
 | **Green Status LED** | Digital Pin `D7` | Solid ON (Healthy), Blinking (Moderate) |
 | **Red Status LED** | Digital Pin `D8` | Solid ON (Unhealthy) |
-| **PM IN NeoPixel Strip** | Digital Pin `D2` | 10-LED RGB Bargraph ($\text{PM}_{2.5}$ intake severity meter) |
-| **PM OUT NeoPixel Strip** | Digital Pin `D3` | 10-LED RGB Bargraph ($\text{PM}_{2.5}$ exhaust severity meter) |
+| **PM IN NeoPixel Strip** | Digital Pin `D2` | 10-LED RGB Bargraph ($\text{PM}_{2.5}$ intake severity meter: Levels 1–3 🟢, 4–6 🟡, 7–10 🔴) |
+| **PM OUT NeoPixel Strip** | Digital Pin `D3` | 10-LED RGB Bargraph ($\text{PM}_{2.5}$ exhaust severity meter: Levels 1–3 🟢, 4–6 🟡, 7–10 🔴) |
 | **15W Blower Fan** | Digital Pin `D5` (PWM) | Front air intake driver, pushes air through filters (5500 RPM) |
 | **MOSFET Control Board** | Circuit Interface | IRLZ44N + Resistors + Diode for safe fan switching |
 | **DC Jack Module** | External Power | Plug interface for high-current fan power adapter |
