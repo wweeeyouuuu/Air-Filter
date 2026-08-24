@@ -5,8 +5,8 @@
 #define BLYNK_TEMPLATE_NAME "Smart Air Purifier"
 #define BLYNK_AUTH_TOKEN    "XQbBjv_QX79y8Rsp7pynpXhGWKMIyPHV"
 
-char ssid[] = "yin56406";    
-char pass[] = "YinChing";    
+char ssid[] = "********";    
+char pass[] = "********";    
 
 // ============================================================================
 // 2. REQUIRED LIBRARIES
